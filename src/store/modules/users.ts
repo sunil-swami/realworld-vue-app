@@ -1,43 +1,51 @@
-import { api, setToken, clearToken } from '../api';
+import {
+  getModule,
+  Module,
+  MutationAction,
+  VuexModule,
+} from 'vuex-module-decorators';
+import store from '@/store';
+import { Profile, User, UserSubmit, UserForUpdate } from '../models';
+import { fetchProfile, fetchUser, loginUser, updateUser, setJWT } from '../api';
 
-export default {
-    namespaced: true,
-    state: {
-        user: null,
-        profile: null,
-    },
-    getters: {
-        username(state) {
-            return (state.user && state.user.username) || null;
-        },
-    },
-    mutations: {
-        setUser(state, payload) {
-            state.user = payload;
-        },
-    },
-    actions: {
-        async getUser({ commit }) {
-            const user = await api.get('/user');
-            commit('setUser', user);
-        },
-        async loginUser({ commit }, user) {
-            clearToken();
-            try {
-                const response = await api.post('/users/login', {
-                    user,
-                });
-                if (response.data.user) {
+@Module({
+  namespaced: true,
+  name: 'users',
+  store,
+  dynamic: true,
+})
+class UsersModule extends VuexModule {
+  user: User | null = null;
+  profile: Profile | null = null;
 
-                    setToken(response.data.user.token);
-                    commit('setUser', response.data.user);
-                }
-            } catch (e) {
-                // tslint:disable-next-line: no-console
-                console.log(e);
-                throw e;
-            }
-        },
-    },
-};
+  get username() {
+    return (this.user && this.user.username) || null;
+  }
 
+  @MutationAction
+  async login(userSubmit: UserSubmit) {
+    const user = await loginUser(userSubmit);
+    setJWT(user.token)
+    return { user };
+  }
+
+  @MutationAction
+  async loadProfile(username: string) {
+    const profile = await fetchProfile(username);
+    return { profile };
+  }
+
+  @MutationAction
+  async loadUser() {
+    const user = await fetchUser()
+    return { user }
+  }
+
+  @MutationAction
+  async updateSelfProfile(userUpdateFields: UserForUpdate) {
+    const user = await updateUser(userUpdateFields)
+    return { user }
+  }
+}
+
+export default getModule(UsersModule);

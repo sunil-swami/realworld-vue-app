@@ -5,34 +5,36 @@
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign in</h1>
           <p class="text-xs-center">
-            <a href>Need an account?</a>
+            <router-link to="/register"> Need an account? </router-link>
           </p>
 
-          <ul class="error-messages">
-            <li v-for="error in errors">{{error.message}}</li>
+          <ul class="error-messages" v-if="loginError">
+            <li>{{ loginError }}</li>
           </ul>
 
           <form>
-            <!-- <fieldset class="form-group">
-            <input class="form-control form-control-lg" type="text" placeholder="Your Name">
-            </fieldset>-->
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
-                v-model="email"
                 type="text"
+                v-model="email"
                 placeholder="Email"
               />
             </fieldset>
             <fieldset class="form-group">
               <input
                 class="form-control form-control-lg"
-                v-model="password"
                 type="password"
+                v-model="password"
                 placeholder="Password"
               />
             </fieldset>
-            <button @click="login" class="btn btn-lg btn-primary pull-xs-right">Sign in</button>
+            <button
+              @click="login()"
+              class="btn btn-lg btn-primary pull-xs-right"
+            >
+              Sign in
+            </button>
           </form>
         </div>
       </div>
@@ -41,29 +43,26 @@
 </template>
 
 <script lang="ts">
-export default {
-  data() {
-    return {
-      password: "",
-      email: "",
-      errors: []
-    };
-  },
-  methods: {
-    login() {
-      this.$store
-        .dispatch("users/loginUser", {
-          email: this.email,
-          password: this.password
-        })
-        .then(() => {
-          this.errors = [];
-        })
-        .catch(err => {
-          console.log(err);
-          this.errors.push(err);
-        });
-    }
-  },
-};
+import { Vue, Component } from 'vue-property-decorator';
+import users from '@/store/modules/users';
+
+@Component
+export default class Login extends Vue {
+  email = '';
+  password = '';
+  loginError = '';
+
+  login() {
+    users
+      .login({
+        email: this.email,
+        password: this.password,
+      })
+      .then(() => this.$router.push('/'))
+      .catch((err) => {
+        console.error(err);
+        this.loginError = 'Invalid username or password';
+      });
+  }
+}
 </script>

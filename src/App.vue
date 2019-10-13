@@ -1,28 +1,23 @@
 <template>
   <div id="app">
-    <AppHeader></AppHeader>
-    <router-view/>
+    <AppNavbar></AppNavbar>
+    <router-view></router-view>
     <AppFooter></AppFooter>
   </div>
 </template>
 
-
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import AppHeader from '@/components/AppHeader.vue';
+import { Vue, Component } from 'vue-property-decorator';
 import AppFooter from '@/components/AppFooter.vue';
-
+import AppNavbar from '@/components/AppNavbar.vue';
 
 @Component({
   components: {
     AppFooter,
-    AppHeader,
+    AppNavbar,
   },
 })
-export default class App extends Vue {
-
-}
+export default class App extends Vue {}
 </script>
-<style lang="scss" scoped>
 
-</style>
+<style></style>
