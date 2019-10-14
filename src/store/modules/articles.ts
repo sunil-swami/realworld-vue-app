@@ -8,7 +8,7 @@ import {
 } from 'vuex-module-decorators';
 import store from '@/store';
 import { Article } from '../models';
-import * as api from '@/store/api';
+import * as api from '@/app-shared/services/api.service';
 type FeedType = 'global' | 'user';
 
 @Module({
@@ -18,10 +18,10 @@ type FeedType = 'global' | 'user';
   store,
 })
 class ArticlesModule extends VuexModule {
-  feed: Article[] = [];
+  public feed: Article[] = [];
 
   @MutationAction
-  async refreshFeed(feedType: FeedType) {
+  public async refreshFeed(feedType: FeedType) {
     const globalFeed = await api.getGlobalFeed();
     return {
       feed: globalFeed.articles,

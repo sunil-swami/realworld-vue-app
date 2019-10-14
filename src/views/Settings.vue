@@ -75,9 +75,9 @@ export default class Settings extends Vue {
   async updateProfile() {
     await users.updateSelfProfile({
       email: this.user.email,
-      bio: this.user.bio
-    })
-    this.user = users.user || {}
+      bio: this.user.bio,
+    });
+    this.user = users.user || {};
   }
 }
 </script>
