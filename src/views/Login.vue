@@ -5,7 +5,7 @@
         <div class="col-md-6 offset-md-3 col-xs-12">
           <h1 class="text-xs-center">Sign in</h1>
           <p class="text-xs-center">
-            <router-link to="/register"> Need an account? </router-link>
+            <router-link to="/register">Need an account?</router-link>
           </p>
 
           <ul class="error-messages" v-if="loginError">
@@ -29,12 +29,7 @@
                 placeholder="Password"
               />
             </fieldset>
-            <button
-              @click="login()"
-              class="btn btn-lg btn-primary pull-xs-right"
-            >
-              Sign in
-            </button>
+            <button @click="login()" class="btn btn-lg btn-primary pull-xs-right">Sign in</button>
           </form>
         </div>
       </div>
@@ -43,25 +38,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import users from '@/store/modules/users';
+import { Vue, Component } from "vue-property-decorator";
+import users from "@/store/modules/users";
 
 @Component
 export default class Login extends Vue {
-  email = '';
-  password = '';
-  loginError = '';
+  email = "";
+  password = "";
+  loginError = "";
 
   login() {
     users
       .login({
         email: this.email,
-        password: this.password,
+        password: this.password
       })
-      .then(() => this.$router.push('/'))
-      .catch((err) => {
+      .then((user) => {
+          this.$router.push({ name: "home" });
+      })
+      .catch(err => {
+        debugger;
         console.error(err);
-        this.loginError = 'Invalid username or password';
+        this.loginError = "Invalid username or password";
       });
   }
 }

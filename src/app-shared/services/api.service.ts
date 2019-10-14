@@ -8,6 +8,8 @@ import {
   ProfileResponse,
   UserForUpdate,
   Article,
+  UserRegister,
+  RegistrationResponse,
 } from '../../store/models';
 
 import {getToken , saveToken , destroyToken} from './Jwt.service';
@@ -63,6 +65,13 @@ export async function loginUser(user: UserSubmit): Promise<User> {
     user,
   });
   return (response.data as UserResponse).user;
+}
+
+export async function registerUser(user: UserRegister): Promise<RegistrationResponse> {
+  const response = await conduitApi.post('/users', {
+    user,
+  });
+  return (response.data as RegistrationResponse);
 }
 
 export async function fetchProfile(username: string): Promise<Profile> {

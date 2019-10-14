@@ -12,6 +12,15 @@ export interface User {
   bio?: string;
   image?: string;
 }
+export interface RegistrationResponse {
+  user: User;
+}
+
+export interface UserRegister {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export interface UserForUpdate {
   email?: string

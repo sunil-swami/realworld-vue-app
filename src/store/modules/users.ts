@@ -5,9 +5,12 @@ import {
   VuexModule,
 } from 'vuex-module-decorators';
 import store from '@/store';
-import { Profile, User, UserSubmit, UserForUpdate } from '../models';
-import { fetchProfile, fetchUser, loginUser, updateUser, setAuthHeader , clearAuthHeader } from '../../app-shared/services/api.service';
-import {saveToken , getToken , destroyToken} from '@/app-shared/services/Jwt.service';
+import { Profile, User, UserSubmit, UserForUpdate, UserRegister, RegistrationResponse } from '../models';
+import {
+  fetchProfile, fetchUser, loginUser, updateUser, setAuthHeader,
+  clearAuthHeader, conduitApi, registerUser
+} from '../../app-shared/services/api.service';
+import { saveToken, getToken, destroyToken } from '@/app-shared/services/Jwt.service';
 @Module({
   namespaced: true,
   name: 'users',
@@ -17,9 +20,15 @@ import {saveToken , getToken , destroyToken} from '@/app-shared/services/Jwt.ser
 class UsersModule extends VuexModule {
   public user: User | null = null;
   public profile: Profile | null = null;
+
   get username() {
     return (this.user && this.user.username) || null;
   }
+
+  get isAuthenticated() {
+    return !!this.user;
+  }
+
 
   @MutationAction
   public async login(userSubmit: UserSubmit) {
@@ -43,14 +52,27 @@ class UsersModule extends VuexModule {
 
   @MutationAction
   public async checkAuth() {
-    if (getToken()) {
+    const checkAuth = !!getToken();
+    let user;
+    if (checkAuth) {
       setAuthHeader();
-      const user = await fetchUser();
+      user = await fetchUser();
       return { user };
     } else {
       destroyToken();
       clearAuthHeader();
+      return { user };
     }
+  }
+
+  @MutationAction
+  public async register(credentials: UserRegister) {
+    const response: RegistrationResponse = await registerUser(credentials);
+    if (response.user) {
+      saveToken(response.user.token);
+      setAuthHeader();
+    }
+    return { user: {response} };
   }
 
   @MutationAction
