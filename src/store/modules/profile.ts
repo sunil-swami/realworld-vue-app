@@ -25,7 +25,7 @@ class ProfileModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    public fetchProfile(context, payload) {
+    public fetchProfile(payload) {
         const { username } = payload;
         return api.ApiService.get('profiles', username)
             .then((data: any) => {

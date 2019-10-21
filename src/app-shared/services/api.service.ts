@@ -122,14 +122,14 @@ export const ArticlesService = {
 
 export const CommentsService = {
   async get(slug) {
-    
+
     if (typeof slug !== 'string') {
       throw new Error(
         'CommentsService.get() article slug required to fetch comments',
       );
     }
     const response = await ApiService.get('articles', `${slug}/comments`);
-    
+
     return response.data;
   },
 
@@ -148,7 +148,7 @@ export const CommentsService = {
 
 export const FavoriteService = {
   async add(slug) {
-    
+
     const response = await ApiService.post(`articles/${slug}/favorite` , {
       slug,
     } );

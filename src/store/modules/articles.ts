@@ -90,10 +90,8 @@ class ArticlesModule extends VuexModule {
   public async fetchArticle(articleSlug, prevArticle) {
     if (prevArticle !== undefined) {
       this.setArticle(prevArticle);
-      // return this.context.dispatch('setArticle', prevArticle);
     }
     const articles = await api.ArticlesService.get(articleSlug);
-    // this.context.dispatch('setArticle', articles);
     this.setArticle(articles);
     return articles;
   }
@@ -101,6 +99,7 @@ class ArticlesModule extends VuexModule {
   @Action({ rawError: true })
   public async fetchComments(articleSlug) {
     const  data  = await api.CommentsService.get(articleSlug);
+    this.setComment(data.comments);
     return { comments: data.comments };
   }
 
@@ -120,25 +119,25 @@ class ArticlesModule extends VuexModule {
   public async addFavorite(slug) {
     const data = await api.FavoriteService.add(slug);
     this.context.commit('updateArticleInList', data.article);
-    this.context.commit('setArticle', data.article);
+    this.context.commit('setArticle', data);
   }
   @Action({ rawError: true })
   public async removeFavorite(slug) {
     const data = await api.FavoriteService.remove(slug);
     this.context.commit('updateArticleInList', data.article);
-    this.context.commit('setArticle', data.article);
+    this.context.commit('setArticle', data);
   }
   @Action({ rawError: true })
-  public publishArticle(article) {
-    return api.ArticlesService.create(article);
+  public publishArticle() {
+    return api.ArticlesService.create(this.article);
   }
   @Action({ rawError: true })
-  public deleteArticle(slug) {
-    return api.ArticlesService.destroy(slug);
+  public deleteArticle() {
+    return api.ArticlesService.destroy(this.article.slug);
   }
   @Action({ rawError: true })
-  public editArticle(article) {
-    return api.ArticlesService.update(article.slug, article);
+  public editArticle() {
+    return api.ArticlesService.update(this.article.slug, this.article);
   }
 
   @Action({ rawError: true })

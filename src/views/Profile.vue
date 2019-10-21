@@ -78,13 +78,13 @@
   </div>
 </template>
 
-<script>
+<script lang= "ts">
 import { Vue, Component } from 'vue-property-decorator';
 import users from '@/store/modules/users';
 
 @Component
 export default class Profile extends Vue {
- created() {
+ public created() {
     users.loadProfile(this.$route.params.username);
   }
   get profile() {

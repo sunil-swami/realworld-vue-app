@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import ArticlePreview from '@/components/article/ArticlePreview.vue';
 import settings from '@/store/modules/settings';
 import ArticleMeta from '@/components/article/ArticleMeta.vue';
@@ -72,15 +72,15 @@ import articles from '@/store/modules/articles';
     Tag  },
 })
 export default class Article extends Vue {
+    @Prop() public slug: string;
     public parseMarkdown(content) {
       return markedContent(content);
     }
 
     get article() {
-      const obj = articles.getArticle;
-      return obj;
+      return articles.getArticle;
     }
-    get currentUser(){
+    get currentUser() {
       return users.user;
     }
     get comments() {

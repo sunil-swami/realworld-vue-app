@@ -81,7 +81,6 @@ export default class ArticleList extends Vue {
   }
 
   get articles() {
-    
     return articles.getArticles;
   }
 

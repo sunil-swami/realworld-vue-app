@@ -54,10 +54,11 @@ export default class Login extends Vue {
         password: this.password,
       })
       .then((user) => {
-          this.$router.push({ name: 'home' });
-      })
-      .catch((err) => {
-       this.loginError = 'Invalid username or password';
+        if (user) {
+            this.$router.push({ name: 'home' });
+        } else {
+           this.loginError = 'Invalid username or password';
+        }
       });
   }
 }

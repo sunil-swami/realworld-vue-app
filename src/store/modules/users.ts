@@ -22,7 +22,7 @@ import { saveToken, getToken, destroyToken } from '@/app-shared/services/Jwt.ser
 class UsersModule extends VuexModule {
   public user: User = {} as User;
   public profile: Profile | null = null;
-
+  public errors!: null;
   get username() {
     return (this.user && this.user.username) || null;
   }
@@ -36,7 +36,9 @@ class UsersModule extends VuexModule {
   get isAuthenticated() {
     return !!this.user;
   }
-
+  get getError() {
+    return this.errors;
+  }
 
   @MutationAction
   public async login(userSubmit: UserSubmit) {
@@ -75,17 +77,26 @@ class UsersModule extends VuexModule {
 
   @Action({ rawError: true })
   public async register(credentials: UserRegister) {
-    const response: RegistrationResponse = await registerUser(credentials);
-    if (response.user) {
-      saveToken(response.user.token);
-      setAuthHeader();
-    }
-    this.context.commit('initUserOnRegister', response);
-    return { user: {response} };
+    await registerUser(credentials)
+    .then((data) => {
+      if (data.user) {
+        saveToken(data.user.token);
+        setAuthHeader();
+      }
+      this.context.commit('initUserOnRegister', data);
+      return { user: {data} };
+    })
+    .catch(({ response }) => {
+      this.setError(response.data.errors);
+    });
   }
 
   @Mutation
-  public async initUserOnRegister(response: RegistrationResponse) {
+  public setError(errors) {
+    this.errors = errors;
+  }
+  @Mutation
+  public initUserOnRegister(response: RegistrationResponse) {
     this.user = response.user;
   }
 

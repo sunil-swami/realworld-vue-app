@@ -33,7 +33,7 @@ export default class Comment extends Vue {
   get currentUser() {
     return users.user;
   }
-  public isCurrentUser() {
+  get isCurrentUser() {
     if (this.currentUser!.username && this.comment!.author.username) {
       return this.comment!.author.username === this.currentUser!.username;
     }

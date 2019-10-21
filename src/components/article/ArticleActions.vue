@@ -6,20 +6,20 @@
       <span>&nbsp;Edit Article</span>
     </router-link>
     <span>&nbsp;&nbsp;</span>
-    <button class="btn btn-outline-danger btn-sm" @click="deleteArticle">
+    <button class="btn btn-outline-danger btn-sm" @click="deleteArticle()">
       <i class="ion-trash-a"></i>
       <span>&nbsp;Delete Article</span>
     </button>
   </span>
   <!-- Used in ArticleView when not author -->
   <span v-else>
-    <button class="btn btn-sm btn-outline-secondary" @click="toggleFollow">
+    <button class="btn btn-sm btn-outline-secondary" @click="toggleFollow()">
       <i class="ion-plus-round"></i>
       <span>&nbsp;</span>
       <span v-text="followUserLabel" />
     </button>
     <span>&nbsp;&nbsp;</span>
-    <button class="btn btn-sm" @click="toggleFavorite" :class="toggleFavoriteButtonClasses">
+    <button class="btn btn-sm" @click="toggleFavorite()" :class="toggleFavoriteButtonClasses">
       <i class="ion-heart"></i>
       <span>&nbsp;</span>
       <span v-text="favoriteArticleLabel" />
@@ -42,7 +42,7 @@ export default class ArticleActions extends Vue {
   @Prop() public canModify?: boolean;
 
   get profile() {
-   return users.fetchProfile;
+   return profile.fetchProfile;
   }
 
   get isAuthenticated() {
@@ -53,24 +53,30 @@ export default class ArticleActions extends Vue {
     users.loadProfile(this.$route.params.username);
   }
 
-  public editArticleLink() {
+  get editArticleLink() {
     return { name: 'article-edit', params: { slug: this.article!.slug } };
   }
-  public toggleFavoriteButtonClasses() {
+  get toggleFavoriteButtonClasses() {
     return {
       'btn-primary': this.article!.favorited,
       'btn-outline-primary': !this.article!.favorited,
     };
   }
-  public followUserLabel() {
-    return `${this.profile!.following ? 'Unfollow' : 'Follow'} ${
-      this.article!.author.username
-    }`;
+  get followUserLabel() {
+    if (this.profile && this.profile.following) {
+      return 'Unfollow ' + `${this.article.author.username}`;
+    } else {
+      return 'Follow ' + `${this.article.author.username}`;
+    }
   }
-  public favoriteArticleLabel() {
-    return this.article!.favorited ? 'Unfavorite Article' : 'Favorite Article';
+  get favoriteArticleLabel() {
+    if (this.article.favorited) {
+      return 'Unfavorite Article';
+    } else {
+      return 'Favorite Article';
+    }
   }
-  public favoriteCounter() {
+  get favoriteCounter() {
     return `(${this.article!.favoritesCount})`;
   }
 
@@ -91,7 +97,7 @@ export default class ArticleActions extends Vue {
       return;
     }
 
-    if (this.article!.following) {
+    if (this.article.following) {
       profile.fetchProfileUnfollow(this.profile!.username);
     } else {
       profile.fetchProfileFollow(this.profile!.username);

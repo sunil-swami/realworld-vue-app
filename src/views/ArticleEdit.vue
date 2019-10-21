@@ -82,7 +82,7 @@ import { Article } from '@/store/models';
   components: {ListErrors },
 })
 export default class ArticleEdit extends Vue {
-  @Prop() public previousArticle: Article = {} as Article;
+  @Prop() public previousArticle: Article;
     public  tagInput = null;
      public inProgress = false;
      public errors = {};
@@ -113,7 +113,7 @@ export default class ArticleEdit extends Vue {
    public onPublish(slug) {
       this.inProgress = true;
       if (slug) {
-          articles.editArticle(slug).then((data) => {
+          articles.editArticle().then((data) => {
           this.inProgress = false;
           this.$router.push({
             name: 'article',
@@ -125,7 +125,7 @@ export default class ArticleEdit extends Vue {
           this.errors = response.data.errors;
         });
       } else {
-          articles.publishArticle(slug).then((data) => {
+          articles.publishArticle().then((data) => {
           this.inProgress = false;
           this.$router.push({
             name: 'article',
