@@ -47,32 +47,32 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import users from "@/store/modules/users";
+import { Vue, Component } from 'vue-property-decorator';
+import users from '@/store/modules/users';
 
 @Component
 export default class Register extends Vue {
-  username = "";
-  email = "";
-  password = "";
-  errors = "";
+  public username = '';
+  public email = '';
+  public password = '';
+  public errors = '';
 
-  onSubmit() {
+  public onSubmit() {
     users
       .register({
         username: this.username,
         email: this.email,
-        password: this.password
+        password: this.password,
       })
-      .then(response => {
+      .then((response) => {
         if (response) {
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: 'home' });
         } else {
-          this.errors = "error occurred while registering user!";
+          this.errors = 'error occurred while registering user!';
         }
       })
-      .catch(err => {
-        console.error(err);
+      .catch((err) => {
+        // console.error(err);
       });
   }
 }

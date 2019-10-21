@@ -23,11 +23,11 @@ export interface UserRegister {
 }
 
 export interface UserForUpdate {
-  email?: string
-  username?: string
-  bio?: string
-  password?: string
-  image?: string
+  email?: string;
+  username?: string;
+  bio?: string;
+  password?: string;
+  image?: string;
 }
 
 export interface Article {
@@ -65,4 +65,19 @@ export interface ProfileResponse {
 export interface ArticlesResponse {
   articles?: (Article)[] | null;
   articlesCount: number;
+}
+
+export interface ArticleResponse {
+  article: Article;
+}
+
+export interface CommentsResponse {
+  comments?: (Comments)[] | null;
+}
+export interface Comments {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  body: string;
+  author: Author;
 }

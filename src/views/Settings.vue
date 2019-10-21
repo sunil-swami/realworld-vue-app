@@ -59,20 +59,20 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { User } from '@/store/models'
+import { User } from '@/store/models';
 import users from '@/store/modules/users';
 
 @Component
 export default class Settings extends Vue {
-  user: Partial<User> = {}
+  public user: Partial<User> = {};
 
-  async created() {
-    await users.loadUser()
-    this.user = users.user || {}
+  public async created() {
+    await users.loadUser();
+    this.user = users.user || {};
   }
 
 
-  async updateProfile() {
+  public async updateProfile() {
     await users.updateSelfProfile({
       email: this.user.email,
       bio: this.user.bio,

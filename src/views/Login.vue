@@ -38,28 +38,26 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import users from "@/store/modules/users";
+import { Vue, Component } from 'vue-property-decorator';
+import users from '@/store/modules/users';
 
 @Component
 export default class Login extends Vue {
-  email = "";
-  password = "";
-  loginError = "";
+  public email = '';
+  public password = '';
+  public loginError = '';
 
-  login() {
+  public login() {
     users
       .login({
         email: this.email,
-        password: this.password
+        password: this.password,
       })
       .then((user) => {
-          this.$router.push({ name: "home" });
+          this.$router.push({ name: 'home' });
       })
-      .catch(err => {
-        debugger;
-        console.error(err);
-        this.loginError = "Invalid username or password";
+      .catch((err) => {
+       this.loginError = 'Invalid username or password';
       });
   }
 }

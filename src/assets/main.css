@@ -5346,8 +5346,10 @@ a.text-danger:focus,a.text-danger:hover{
 }
 .tag-default.tag-outline{
     border:1px solid #ddd;
-    color:#aaa!important;
-    background:0 0!important
+    /* color:#aaa!important;
+    background:0 0!important; */
+    color: white !important;
+    background: #3d6173 !important;
 }
 ul.tag-list{
     padding-left:0!important;

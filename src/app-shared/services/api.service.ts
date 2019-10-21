@@ -17,7 +17,7 @@ export const conduitApi = axios.create({
   baseURL: 'https://conduit.productionready.io/api',
 });
 
-const ApiService = {
+export const ApiService = {
 
 query(resource, params) {
     return conduitApi.get(resource, params).catch((error) => {
@@ -50,7 +50,6 @@ query(resource, params) {
   },
 };
 
-export default ApiService;
 
 export function setAuthHeader() {
   conduitApi.defaults.headers.common.Authorization = `Token ${getToken()}`;
@@ -103,7 +102,7 @@ export const ArticlesService = {
     });
     return response.data;
   },
-  async get(slug) {
+  async get(slug): Promise<Article> {
     const response = await ApiService.get('articles', slug);
     return response.data as Article;
   },
@@ -123,12 +122,14 @@ export const ArticlesService = {
 
 export const CommentsService = {
   async get(slug) {
+    
     if (typeof slug !== 'string') {
       throw new Error(
         'CommentsService.get() article slug required to fetch comments',
       );
     }
     const response = await ApiService.get('articles', `${slug}/comments`);
+    
     return response.data;
   },
 
@@ -142,5 +143,25 @@ export const CommentsService = {
   async destroy(slug, commentId) {
     const response = await ApiService.delete(`articles/${slug}/comments/${commentId}`);
     return response.data;
+  },
+};
+
+export const FavoriteService = {
+  async add(slug) {
+    
+    const response = await ApiService.post(`articles/${slug}/favorite` , {
+      slug,
+    } );
+    return response.data;
+  },
+  async remove(slug) {
+    const response = await ApiService.delete(`articles/${slug}/favorite`);
+    return response.data;
+  },
+};
+
+export const TagsService = {
+  get() {
+    return ApiService.get('tags');
   },
 };

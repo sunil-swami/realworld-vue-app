@@ -84,7 +84,7 @@ import users from '@/store/modules/users';
 
 @Component
 export default class Profile extends Vue {
-  created() {
+ created() {
     users.loadProfile(this.$route.params.username);
   }
   get profile() {

@@ -6,41 +6,49 @@
         <p>A place to share your knowledge.</p>
       </div>
     </div>
-
     <div class="container page">
       <div class="row">
         <div class="col-md-9">
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
-              <li class="nav-item">
-                <a class="nav-link disabled" href="">Your Feed</a>
+              <li v-if="isAuthenticated" class="nav-item">
+                <router-link
+                  :to="{ name: 'home-my-feed' }"
+                  class="nav-link"
+                  active-class="active"
+                >
+                  Your Feed
+                </router-link>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="">Global Feed</a>
+                <router-link
+                  :to="{ name: 'home' }"
+                  exact
+                  class="nav-link"
+                  active-class="active"
+                >
+                  Global Feed
+                </router-link>
+              </li>
+              <li class="nav-item" v-if="tag">
+                <router-link
+                  :to="{ name: 'home-tag', params: { tag } }"
+                  class="nav-link"
+                  active-class="active"
+                >
+                  <i class="ion-pound"></i> {{ tag }}
+                </router-link>
               </li>
             </ul>
           </div>
-
-          <ArticlePreview
-            v-for="article in feed"
-            :article="article"
-            :key="article.slug"
-          ></ArticlePreview>
+          <router-view></router-view>
         </div>
-
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
-
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <Tag v-for="(tag, index) in tags" :name="tag" :key="index">
+              </Tag>
             </div>
           </div>
         </div>
@@ -51,21 +59,36 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ArticlePreview from '@/components/article/ArticlePreview.vue';
 import articles from '@/store/modules/articles';
+import Tag from '@/components/Tags/Tag.vue';
+import users from '@/store/modules/users';
 
 @Component({
   components: {
-    ArticlePreview,
+    Tag,
   },
 })
 export default class Home extends Vue {
-  get feed() {
-    return articles.feed;
-  }
+//   get articles() {
+//     return articles.articles;
+//   }
 
-  async created() {
-    await articles.refreshFeed('global');
+ public mounted() {
+     articles.fetchTags();
   }
+//   public async created() {
+//     await articles.refreshFeed('global');
+//   }
+
+    get isAuthenticated() {
+       return users.isAuthenticated;
+    }
+
+    get tags() {
+       return articles.getTags;
+    }
+   get tag() {
+      return this.$route.params.tag;
+    }
 }
 </script>
