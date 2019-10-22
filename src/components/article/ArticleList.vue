@@ -43,11 +43,14 @@ export default class ArticleList extends Vue {
     this.fetchArticles();
   }
 
-  get listConfig() {
+  get listConfig(): any {
     const { type } = this;
     const filters = {
       offset: (this.currentPage - 1) * this.itemsPerPage,
       limit: this.itemsPerPage,
+      author: '',
+      tag: '',
+      favorited: '',
     };
     if (this.author) {
       filters.author = this.author;

@@ -9,6 +9,7 @@ import {
 import store from '@/store';
 
 import * as api from '@/app-shared/services/api.service';
+import { Profile } from '../models';
 
 @Module({
     namespaced: true,
@@ -19,18 +20,17 @@ import * as api from '@/app-shared/services/api.service';
 
 class ProfileModule extends VuexModule {
     public errors = {};
-    public profile = {};
+    public profile: Profile = {} as Profile;
     get getprofile() {
         return this.profile;
     }
 
     @Action({ rawError: true })
-    public fetchProfile(payload) {
-        const { username } = payload;
+    public fetchProfile(username: string) {
         return api.ApiService.get('profiles', username)
             .then((data: any) => {
                 this.context.commit('setProfile', data.profile);
-                return data;
+                return data.profile;
             })
             .catch((error) => {
                 throw new Error(error);

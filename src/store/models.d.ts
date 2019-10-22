@@ -41,6 +41,7 @@ export interface Article {
   favorited: boolean;
   favoritesCount: number;
   author: Author;
+  following: any;
 }
 export interface Author {
   username: string;

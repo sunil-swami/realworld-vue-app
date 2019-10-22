@@ -1,5 +1,3 @@
-import articles from './node_modules/@/store/modules/articles';
-
 jest.mock('vue', () => {
     return {
         axios: {

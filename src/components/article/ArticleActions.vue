@@ -41,7 +41,7 @@ export default class ArticleActions extends Vue {
   @Prop() public article!: Article;
   @Prop() public canModify?: boolean;
 
-  get profile() {
+  get profile(): any {
    return profile.fetchProfile;
   }
 
