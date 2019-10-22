@@ -82,7 +82,7 @@ import { Article } from '@/store/models';
   components: {ListErrors },
 })
 export default class ArticleEdit extends Vue {
-  @Prop() public previousArticle: Article;
+  @Prop() public previousArticle!: Article;
     public  tagInput = null;
      public inProgress = false;
      public errors = {};

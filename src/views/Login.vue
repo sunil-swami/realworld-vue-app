@@ -53,12 +53,9 @@ export default class Login extends Vue {
         email: this.email,
         password: this.password,
       })
-      .then((user) => {
-        if (user) {
-            this.$router.push({ name: 'home' });
-        } else {
-           this.loginError = 'Invalid username or password';
-        }
+       .then(() => this.$router.push({ name: 'home' }))
+      .catch((err) => {
+        this.loginError = 'Invalid username or password';
       });
   }
 }

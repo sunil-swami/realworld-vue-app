@@ -65,14 +65,10 @@ export default class Register extends Vue {
         password: this.password,
       })
       .then((response) => {
-        if (response) {
           this.$router.push({ name: 'home' });
-        } else {
-          this.errors = 'error occurred while registering user!';
-        }
       })
       .catch((err) => {
-        // console.error(err);
+         this.errors = 'error occurred while registering user!';
       });
   }
 }

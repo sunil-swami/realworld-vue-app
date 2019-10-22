@@ -28,7 +28,8 @@ class ArticlesModule extends VuexModule {
     title: '',
     description: '',
     body: '',
-    tagList: [],
+    tagList: [''],
+    slug: '',
   };
 
 
@@ -69,7 +70,7 @@ class ArticlesModule extends VuexModule {
   }
 
   @Mutation
-  public setArticles(data: ArticlesResponse) {
+  public setArticles(data: any) {
     this.articles  = data.articles;
     this.articlesCount = data.articlesCount;
     this.isLoading = false;
@@ -168,7 +169,9 @@ class ArticlesModule extends VuexModule {
   }
   @Mutation
   public addTag(tag) {
-    this.article.tagList = this.article.tagList.push(tag);
+    const tagList: string[] = [];
+    tagList.push(tag);
+    this.article.tagList = tagList;
   }
   @Mutation
   public removeTag(tag) {

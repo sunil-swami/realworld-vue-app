@@ -72,7 +72,7 @@ import articles from '@/store/modules/articles';
     Tag  },
 })
 export default class Article extends Vue {
-    @Prop() public slug: string;
+    @Prop() public slug!: string;
     public parseMarkdown(content) {
       return markedContent(content);
     }

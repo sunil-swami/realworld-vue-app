@@ -106,7 +106,7 @@ export default class ArticleActions extends Vue {
   }
   public async deleteArticle() {
     try {
-      await articles.deleteArticle(this.article!.slug);
+      await articles.deleteArticle();
       this.$router.push('/');
     } catch (err) {
       // console.error(err);
